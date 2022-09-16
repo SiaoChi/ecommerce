@@ -1,5 +1,8 @@
 # ecommerce
 
+project structure
+
+```
 ecommerce/
 ├── __pycache__
 ├── ecommerce
@@ -14,3 +17,4 @@ ecommerce/
 │   │   └── product
 │   └── js
 └── templates
+```
