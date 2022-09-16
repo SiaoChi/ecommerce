@@ -1,0 +1,35 @@
+{% extends 'main.html'%}
+{% load static %}
+{% block content %}
+    <br>
+    <img class="thumbnail" src="{% static 'images/default1.png' %}">
+    {% for b in board %}
+    <div class="box-element">
+        <h2>購物公布欄</h2>
+        <p>{{b.home_board | linebreaks}}</p>
+    </div>
+    {% endfor %}
+    <br>
+    <br>
+{% for product in products %}
+    <div class="col-lg-12">
+        <img class="thumbnail" src="{{ product.imageURL }}">
+        <div class="box-element">
+            <h4>{{ product.name }}</h4>
+            <p>{{ product.detail | linebreaks }}</p>
+            <p>原價：NT{{ product.price }}</p>
+            <p>團購價：NT{{ product.promotion }}</p>
+            <button class="btn btn-outline-secondary add-btn update-cart" data-product="{{ product.id }}" data-action="add">加入購物車</button></div>
+    </div>
+    <br>
+    <br>
+
+{#    切記子model的名稱必須是小寫+ _set#}
+{#    {% for i in  product.productimage_set.all  %}#}
+{#        <img class = 'thumbnail' src="{{ i.image.url }}">#}
+{#    {% endfor %}#}
+
+{% endfor %}
+
+{% endblock %}
+

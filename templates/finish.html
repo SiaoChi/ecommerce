@@ -1,0 +1,46 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+{#    <br>#}
+{#    訂購人：#}
+{#    地址：#}
+{#    電話：#}
+    <br>
+     {% for b in board %}
+         <div class = 'box-element'>
+
+         <h4>感謝你的購買！</h4>
+         <br>
+        <p>{{ b.checkout_board | linebreaksbr}}</p>
+     {% endfor %}
+        </div>
+    <br>
+    <div class="box-element">
+    <br>
+				<table class="table">
+                <h4>訂單細節</h4>
+                <br>
+				{% for item in items %}
+				<div class="cart-row">
+					<div style="flex:2"><img class="row-image" src="{{item.product.imageURL}}"></div>
+					<div style="flex:2"><p>{{item.product.name}}</p></div>
+                    <div style="flex:1"><p>{{item.quantity}}</p></div>
+{#					<div style="flex:1"><p>${{item.product.promotion}}</p></div>#}
+
+					<div style="flex:1"><p>${{item.get_total|floatformat:2}}</p></div>
+				</div>
+				{% endfor %}
+
+                <br>
+                <div class="cart-row">
+
+						<div style="flex:1"><h6>商品數量: <strong>{{order.get_cart_items}}</strong></h6></div>
+						<div style="flex:1"><h6>總金額:<strong> ${{order.get_cart_total}}</strong></h6></div>
+                </div>
+
+            </div>
+
+				</table>
+        </div>
+
+{% endblock %}
