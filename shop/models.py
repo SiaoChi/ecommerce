@@ -7,7 +7,7 @@ class Product(models.Model):
     name = models.CharField(max_length=40, verbose_name='產品名')
     price = models.IntegerField(verbose_name ='原價')
     promotion = models.IntegerField(verbose_name ='特價')
-    detail = models.TextField(max_length= 500 , verbose_name= '商品說明')
+    detail = models.TextField(max_length= 700 , verbose_name= '商品說明')
     image = models.ImageField(null=True, blank=True , verbose_name= '圖片',upload_to="product")
 
     def __str__(self):
@@ -43,7 +43,7 @@ class Order(models.Model):
     zipcode = models.CharField(max_length=6, null=False,verbose_name='郵遞區號')
     address = models.CharField(max_length=200, null=False,verbose_name='地址')
     complete = models.BooleanField(default=False)
-    message = models.CharField(max_length=200,null=True,verbose_name='備註欄')
+    message = models.TextField(max_length=500,null=True, blank= True ,verbose_name='備註欄')
     datetime = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -70,6 +70,7 @@ class Order(models.Model):
 
 #為了計算單項item的費用，才能讓order知道總價，讓前端的數量可以修改
 class OrderItem(models.Model):
+    #ForeignKey是外子，父層是後面填寫的Model，
     product = models.ForeignKey(Product, on_delete=models.SET_NULL,null=True)
     order = models.ForeignKey(Order, on_delete=models.SET_NULL,null=True)
     quantity = models.IntegerField(default=0, null=True,blank=True)
@@ -80,10 +81,22 @@ class OrderItem(models.Model):
         total = self.product.price * self.quantity
         return total
 
+
+    def __str__(self):
+        return self.product.name
+
 class Board(models.Model):
     home_board = models.TextField(max_length=500, verbose_name='首頁公布欄')
     checkout_board = models.TextField(max_length=500, verbose_name='結帳公布欄')
 
+    def __str__(self):
+        return '佈告欄'
 
+class Carousel(models.Model):
+    title = models.CharField(max_length=30, verbose_name='主標')
+    description = models.TextField(max_length=200, verbose_name='描述')
+    image = models.ImageField(null=True, blank=True , verbose_name= '圖片',upload_to="carousel")
 
+    def __str__(self):
+        return self.title
 

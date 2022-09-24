@@ -16,7 +16,7 @@
 
                             <form class='form' method="POST">
 							{% csrf_token %}
-                                <button  style="float:right; margin:5px;" class="btn btn-success" type="submit" method ="POST">提交訂單</button>
+                                <button style="float:right; margin:5px;" class="delete-cart btn btn-success" type="submit" method ="POST">提交訂單</button>
 						    </form>
                         </th>
 					</tr>
@@ -29,6 +29,7 @@
 				<div class="cart-row">
 					<div style="flex:2"></div>
 					<div style="flex:2"><strong>商品</strong></div>
+                    <div style="flex:1"></div>
 					<div style="flex:1"><strong>價格</strong></div>
                     <div style="flex:1"><strong>團購價</strong></div>
 					<div style="flex:1"><strong>數量</strong></div>
@@ -38,6 +39,7 @@
 				<div class="cart-row">
 					<div style="flex:2"><img class="row-image" src="{{item.product.imageURL}}"></div>
 					<div style="flex:2"><p>{{item.product.name}}</p></div>
+                    <span style="flex:1 ; cursor: pointer ; font-size: 4px ;text-align: left ; color: slategray" data-product="{{item.product.id}}" data-action="delete" class="update-cart">刪除</span>
 					<div style="flex:1"><p>${{item.product.price}}</p></div>
                     <div style="flex:1"><p>${{item.product.promotion}}</p></div>
 					<div style="flex:1">

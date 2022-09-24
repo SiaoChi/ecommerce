@@ -1,5 +1,9 @@
 import json
 from .models import *
+import os
+from django.core.files.storage import default_storage
+from django.db.models import FileField
+
 
 # add cart item
 # if (action == 'add'){
@@ -50,3 +54,5 @@ def cookieCart(request):
             pass
 
     return {'cartItems': cartItems, 'order': order, 'items': items}
+
+
