@@ -3,7 +3,7 @@ import json
 from django.shortcuts import render, redirect
 from .models import *
 from .form import *
-from .until import cookieCart
+from .until import cookieCart , Coupon
 from django.http import JsonResponse
 from django.contrib import messages
 
@@ -11,8 +11,7 @@ from django.contrib import messages
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.template.loader import render_to_string
-
-
+from django.utils import timezone
 
 
 
@@ -20,8 +19,7 @@ from django.template.loader import render_to_string
 
 def shop(request):
     data = cookieCart(request)
-    homeImgs = Carousel.objects.all()
-
+    carousel = Carousel.objects.all()
     cartItems = data['cartItems']
 
     products = Product.objects.all()
@@ -47,15 +45,45 @@ def cart(request):
     return render(request,'cart.html',locals())
 
 def checkout(request):
+    # 畫面資訊
     check_board = Board.objects.all()
     cartdata = cookieCart(request)
     form = OrderForm()
     cartItems = cartdata['cartItems']
     order = cartdata['order']
+    order_total = order['get_cart_total']
     items = cartdata['items']
+    coupon_form = CouponForm()
+    # request.session['coupon_used'] = False
+
+    #優惠碼送出
+    if request.method == "POST" and 'coupon' in request.POST:
+        now = timezone.now()
+        # print(now)
+        coupon_form = CouponForm(request.POST)
+        # print(coupon_form)
+        if coupon_form.is_valid():
+            code = coupon_form.cleaned_data['code']
 
 
-    if request.method == "POST":
+            try:
+                coupon = Coupon.objects.get(code__iexact=code,
+                                               valid_from__lte=now,
+                                               valid_to__gte=now,
+                                               active=True)
+                after_discount_total = int(order_total) - int(coupon.discount)
+                messages.success(request, '優惠碼有效')
+
+                request.session['coupon_used'] = True
+                request.session['after_discount_total']= after_discount_total
+                request.session['coupon.discount'] = coupon.discount
+
+            except:
+                messages.success(request, '優惠碼無效')
+    print('-----')
+
+    #訂購資訊表單送出
+    if request.method == "POST" and 'order' in request.POST:
         # 查一下request.post是什麼
         form = OrderForm(request.POST)
         # print('test')
@@ -77,8 +105,15 @@ def checkout(request):
 
         form = OrderForm()
 
-        email_messages = shop_item + "\n以上共計{}元\n感謝您的訂購！\n\n 【匯款帳戶資訊】\n匯款銀行帳戶： 中國信託 822\n戶 名： 莊筱詩\n帳 號：576-540-236-363\n提醒您：請於三日內匯款訂單才會正式成立唷！♥".format(order['get_cart_total'])
+        #以下為自動寄信功能
+        #使用優惠碼，mail費用有差別
 
+        if request.session['coupon_used'] :
+            email_messages = shop_item + "\n使用折扣碼折抵{}元\n折扣後總金額{}元\n感謝您的訂購！\n\n 【匯款帳戶資訊】\n匯款銀行帳戶： 中國信託 822\n戶 名： 莊筱詩\n帳 號：576-540-236-363\n提醒您：請於三日內匯款訂單才會正式成立唷！♥".format(
+                request.session['coupon.discount'],request.session['after_discount_total'])
+        else:
+            email_messages = shop_item + "\n以上共計{}元\n感謝您的訂購！\n\n 【匯款帳戶資訊】\n匯款銀行帳戶： 中國信託 822\n戶 名： 莊筱詩\n帳 號：576-540-236-363\n提醒您：請於三日內匯款訂單才會正式成立唷！♥".format(
+                order['get_cart_total'])
 
         email_template = render_to_string('email.html',
                                           {'username':_order.name,
@@ -98,14 +133,20 @@ def checkout(request):
         email.send()
 
         messages.success(request, '你的訂單完成，已同步寄信到您的信箱，請留意匯款時間。')
+
         cartdata.clear()
         order.clear()
         items.clear()
+        request.session.clear()
         cartItems = 0
         print(cartdata)
         return render(request,'checkout.html',locals())
 
     return render(request,'checkout.html',locals())
+
+
+
+
 
 # def updateItem(request):
 #     data = json.loads(request.body)

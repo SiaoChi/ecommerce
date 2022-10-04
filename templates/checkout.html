@@ -9,7 +9,7 @@
                 <h5 >感謝你的購買！</h5>
                 <p>{{ email_messages | linebreaksbr }}</p>
                 <br>
-                <p>若訂資訊需要修改，請直接與嘻嘻聯絡 Line: @ooooxxxx</p>
+                <p>若訂購資訊需要修改，請直接與嘻嘻聯絡 Line: @ooooxxxx</p>
             </div>
             </body>
         {% else %}
@@ -33,56 +33,42 @@
 				</div>
 				{% endfor %}
 
-                <br>
-                <div class="cart-row">
 
+                <div class="cart-row">
 						<div style="flex:1"><h6>商品數量: <strong>{{order.get_cart_items}}</strong></h6></div>
-						<div style="flex:1"><h6>總金額:<strong> ${{order.get_cart_total}}</strong></h6></div>
+						<div style="flex:1"><h6>總金額:<span> ${{order_total}}</span></h6></div>
                 </div>
+               {% if after_discount_total %}
+                <div class="cart-row">
+                        <div style="flex:1"><h6>優惠碼折扣:<span style="color:hotpink"> ${{coupon.discount}}</span></h6></div>
+                        <div style="flex:1"><h6>折扣後金額:<span style="color:hotpink"> ${{after_discount_total}}</span></h6></div>
+                </div>
+               {% endif %}
+                	</table>
+            <div>
+                         <form class="form" method = 'POST'>
+                           {% csrf_token %}
+                           {{ coupon_form.as_p }}
+                           <button class=" btn btn-success" type ='submit' name="coupon">送出</button>
+                         </form>
 
             </div>
 
-				</table>
         </div>
+        <br>
         <br>
             <div class="box-element">
                     <h4>填寫訂購資訊</h4>
                     <br>
-{#                     {% for b in board %}#}
-{#                        <p>{{ b.checkout_board | linebreaksbr}}</p>#}
-{#                     {% endfor %}#}
-{#                    <br>#}
                     <form class="form" method = 'POST' >
                         {% csrf_token %}
                         {{ form.as_p}}
-
-                        <button class=" btn btn-success" type ='submit' >送出訂單</button>
+                        <button class=" btn btn-success" type ='submit' name="order">送出訂單</button>
                     </form>
 			</div>
 
 			<br>
-{#			<div class="box-element">#}
-{#                <h5>訂單細節</h5>#}
-{#				<div class="cart-row">#}
-{#					<div style="flex:2"></div>#}
-{#					<div style="flex:2"><strong>商品</strong></div>#}
-{#                    <div style="flex:2"><strong>價格</strong></div>#}
-{#					<div style="flex:1"><strong>團購價</strong></div>#}
-{#					<div style="flex:1"><strong>數量</strong></div>#}
-{#					<div style="flex:1"><strong>金額</strong></div>#}
-{#				</div>#}
-{#				{% for item in items %}#}
-{#				<div class="cart-row">#}
-{#					<div style="flex:2"><img class="row-image" src="{{item.product.imageURL}}"></div>#}
-{#					<div style="flex:2"><p>{{item.product.name}}</p></div>#}
-{#                    <div style="flex:1"><p>${{item.product.price}}</p></div>#}
-{#					<div style="flex:1"><p>${{item.product.promotion}}</p></div>#}
-{##}
-{#					<div style="flex:1"><p>${{item.get_total|floatformat:2}}</p></div>#}
-{#				</div>#}
-{#				{% endfor %}#}
-{#            <br>#}
-{#			</div>#}
+
 		</div>
 	</div>
     <br>

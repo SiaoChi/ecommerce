@@ -31,4 +31,15 @@ class OrderForm(ModelForm):
         for name, field in self.fields.items():
             field.widget.attrs.update({'class': 'input'})
 
+class CouponForm(ModelForm):
+    class Meta:
+        model = Coupon
+        fields = ['code']
+        widgets = {
+            'code': forms.TextInput(attrs={'placeholder': '請輸入優惠碼','class':'input'}),
+        }
+        labels = {
+            'code':'優惠碼'
+        }
+
 # https://github.com/summernote/django-summernote 新增summernote會使用到

@@ -1,18 +1,30 @@
 import json
 from .models import *
+from .form import *
 import os
 from django.core.files.storage import default_storage
 from django.db.models import FileField
+from django.utils import timezone
+from django.shortcuts import render, redirect
+from django.contrib import messages
 
-
-# add cart item
-# if (action == 'add'){
-# 		if (cart[productId] == undefined){
-# 		cart[productId] = {'quantity':1}
+# def Coupon(request):
 #
-# 		}else{
-# 			cart[productId]['quantity'] += 1
-# 		}
+#         now = timezone.now()
+#         coupon_form = CouponForm(request.POST)
+#         if coupon_form.is_valid():
+#             code = coupon_form.cleaned_data['code']
+#             try:
+#                 couponObj = Coupon.objects.get(code__iexact= code,
+#                                             valid_from__lte=now,
+#                                             valid_to__gte=now,
+#                                             active=True)
+#             except:
+#                 messages.alert(request, '優惠碼無效')
+#
+#     context = {'couponObj':couponObj }
+#
+#     return context
 
 def cookieCart(request):
     # Create empty cart for now for non-logged in user
@@ -37,6 +49,7 @@ def cookieCart(request):
 
                 product = Product.objects.get(id=i)
                 total = (product.promotion * cart[i]['quantity'])
+
 
                 order['get_cart_total'] += total
                 order['get_cart_items'] += cart[i]['quantity']

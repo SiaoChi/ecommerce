@@ -93,10 +93,29 @@ class Board(models.Model):
         return '佈告欄'
 
 class Carousel(models.Model):
-    title = models.CharField(max_length=30, verbose_name='主標')
-    description = models.TextField(max_length=200, verbose_name='描述')
+    title = models.CharField(max_length=30, verbose_name='主標',null=True, blank=True)
+    description = models.TextField(max_length=200, verbose_name='描述',null=True, blank=True)
     image = models.ImageField(null=True, blank=True , verbose_name= '圖片',upload_to="carousel")
 
     def __str__(self):
         return self.title
+
+    @property
+    def imageURL(self):
+        try:
+            url = self.image.url
+        except:
+            url = ''
+        return url
+
+class Coupon(models.Model):
+    name = models.CharField(max_length=20, verbose_name='優惠券名稱')
+    code = models.CharField(max_length=10, verbose_name='優惠碼')
+    discount = models.IntegerField(max_length=5, verbose_name='折扣費用')
+    valid_from = models.DateTimeField( verbose_name='開始日期')
+    valid_to = models.DateTimeField( verbose_name='結束日期')
+    active = models.BooleanField (verbose_name ='啟用')
+
+    def __str__(self):
+        return self.name
 

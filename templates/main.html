@@ -9,7 +9,8 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
 
-    	<script type="text/javascript">
+
+    <script type="text/javascript">
 
 		function getToken(name) {
 		    var cookieValue = null;
@@ -68,7 +69,7 @@
 </head>
 
 
-<body>
+<body unload="deleteCart()">
 
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
@@ -88,16 +89,6 @@
       </div>
 </div>
 
-{#	    <div class="form-inline my-2 my-lg-0">#}
-{#	     	<a href="{% url 'cart' %}" class="btn btn-warning">購物車</a>#}
-
-{#	     	<a href="{% url 'cart' %}">#}
-{#	    		<img  id="cart-icon" src="{% static 'images/cart.png' %}">#}
-{#	    	</a>#}
-{#	    	<p id="cart-total">{{ cartItems }}</p>#}
-
-{#	    </div>#}
-{#	  </div>#}
 	</nav>
 
 

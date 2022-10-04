@@ -29,4 +29,5 @@ admin.site.register(Product,summerAdmin)
 admin.site.register(Order,OrderAdmin)
 # admin.site.register(OrderItem)
 admin.site.register(Board,summerAdmin)
+admin.site.register(Coupon)
 
