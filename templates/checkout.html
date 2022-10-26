@@ -1,22 +1,25 @@
 {% extends 'main.html' %}
 {% load static %}
 {% block content %}
-	<div class="row">
-		<div class="col-lg-12" >
+
+{#		<div class="col-lg-12" >#}
             {% if email_messages %}
             <body onload="deleteCart()">
             <div class="box-element delete-cart" >
                 <h5 >感謝你的購買！</h5>
                 <p>{{ email_messages | linebreaksbr }}</p>
                 <br>
-                <p>若訂購資訊需要修改，請直接與嘻嘻聯絡 Line: @ooooxxxx</p>
+                {{ checkout_board | safe }}
+                <a href="/"> < 回到首頁</a>
             </div>
+
             </body>
         {% else %}
+            <div class="box-element" style="margin-top: 20px">
             <br>
-			<div class="box-element">
+{#			<div class="box-element" style="margin-top: 30px">#}
 
-				<a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; 修改訂單</a>
+				<a  class="btn btn-outline-dark" href="{% url 'update-order' %}">&#x2190; 修改訂單</a>
 				<br>
 				<br>
 				<table class="table">
@@ -29,41 +32,44 @@
                     <div style="flex:1"><p>{{item.quantity}}</p></div>
 {#					<div style="flex:1"><p>${{item.product.promotion}}</p></div>#}
 
-					<div style="flex:1"><p>${{item.get_total|floatformat:2}}</p></div>
+					<div style="flex:1"><p>${{item.get_total}}</p></div>
 				</div>
 				{% endfor %}
 
+                {% if after_discount_total %}
+                <div class="cart-row">
+                        <div style="flex:1"><h6>優惠碼折扣:<span style="color:hotpink"> ${{coupon_discount}}</span></h6></div>
+                        <div style="flex:1"><h6>折扣後金額（含運):<span style="color:hotpink"> ${{after_discount_total}}</span></h6></div>
+                </div>
+               {% else %}
 
                 <div class="cart-row">
-						<div style="flex:1"><h6>商品數量: <strong>{{order.get_cart_items}}</strong></h6></div>
-						<div style="flex:1"><h6>總金額:<span> ${{order_total}}</span></h6></div>
+                    <div style="flex:1"><h6>小計: <strong>{{order_total}}</strong></h6></div>
+					<div style="flex:1"><h6>運費: ${{shipping_fee}}</h6></div>
+                    <div style="flex:1"><h6>總金額(含運):<span style="color:hotpink"> ${{shipping_total}}</span></h6></div>
                 </div>
-               {% if after_discount_total %}
-                <div class="cart-row">
-                        <div style="flex:1"><h6>優惠碼折扣:<span style="color:hotpink"> ${{coupon.discount}}</span></h6></div>
-                        <div style="flex:1"><h6>折扣後金額:<span style="color:hotpink"> ${{after_discount_total}}</span></h6></div>
+
+                {% endif %}
+
+
+
+                    <div class="cart-row"><div ><h6>取貨方式：<span style="color:hotpink">{{ selected_deliver }}</span></h6></div></div>
+                    {% if order_total > 1000 %}<div class="cart-row"><div><h6 style="color: hotpink">符合免運資格</h6></div></div>{% endif %}
+                </table>
+
+
                 </div>
-               {% endif %}
-                	</table>
-            <div>
-                         <form class="form" method = 'POST'>
-                           {% csrf_token %}
-                           {{ coupon_form.as_p }}
-                           <button class=" btn btn-success" type ='submit' name="coupon">送出</button>
-                         </form>
 
-            </div>
-
-        </div>
-        <br>
         <br>
             <div class="box-element">
                     <h4>填寫訂購資訊</h4>
-                    <br>
+                <br>
                     <form class="form" method = 'POST' >
                         {% csrf_token %}
                         {{ form.as_p}}
-                        <button class=" btn btn-success" type ='submit' name="order">送出訂單</button>
+                        <button class=" btn btn-success " type ='submit' name="order">送出結帳</button>
+{#                        <button class=" btn btn-success g-recaptcha" data-sitekey="6Les9aQiAAAAAKRZhn9gqL3OCtElF9PwIBoYmbiT" data-callback='onSubmit' data-action='submit' type ='submit' name="order">送出結帳</button>#}
+
                     </form>
 			</div>
 
@@ -71,8 +77,11 @@
 
 		</div>
 	</div>
+{#    </div>#}
     <br>
     <br>
     {% endif %}
+
+
 
 {% endblock content %}

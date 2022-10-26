@@ -9,8 +9,16 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
 
+    <script
+  src="https://code.jquery.com/jquery-3.6.1.js"
+  integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+  crossorigin="anonymous"></script>
+     <script src="https://www.google.com/recaptcha/api.js"></script>
+
 
     <script type="text/javascript">
+
+        {#console.log($)#}
 
 		function getToken(name) {
 		    var cookieValue = null;
@@ -58,53 +66,56 @@
 		console.log('Cart:', cart)
 
         function deleteCart() {
-            console.log('got..')
+
             cart = {};
             document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/";
             console.log('delete cart')
     }
 
-	</script>
+
+
+    </script>
 
 </head>
 
 
 <body unload="deleteCart()">
 
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark" >
+        <div class="container" >
 	  <a class="navbar-brand" href="{% url 'shop' %}">嘻嘻選物</a>
 	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 	    <span class="navbar-toggler-icon"></span>
 	  </button>
 
+
 	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 	    <ul class="navbar-nav ml-auto">
-	      <li class="nav-item-1"><a class="nav-txt" href="#">購物須知</a></li>
-            <li class="nav-item-1"><a class="nav-txt" href="#">聯絡我們</a></li>
-	    </ul>
-          <ul class="navbar-nav" id="cart-btn">
-              <li class="form-inline"><a href="{% url 'cart' %}" class="btn btn-info">購物車({{ cartItems }})</a></li>
-          </ul>
+	      <li class="nav-item-1"><a class="nav-txt" href="{% url 'payment-report' %}">匯款回報</a></li>
+          <li class="nav-item-1"><a class="nav-txt" href="{% url 'order-report' %}">訂單查詢</a></li>
+{#            <li class="nav-item-1"><a class="nav-txt" href="#">購物須知</a></li>#}
+            <li class="nav-item-1"><a class="nav-txt" href="#">聯絡方式</a></li>
+{#	    </ul>#}
+{#          <ul class="navbar-nav" id="cart-btn">#}
+{#              <li class="form-inline"><a href="{% url 'cart' %}" class="btn btn-info">購物車({{ cartItems }})</a></li>#}
+{#          </ul>#}
       </div>
-</div>
 
-	</nav>
-
+    </nav>
 
     {% if messages %}
+        <div>
         {%  for message in messages %}
-        <div class = 'alert alert-success'>{{ message }}</div>
+        <div class = 'alert alert-success' >{{message}}</div>
         {% endfor %}
+        </div>
     {% endif %}
 
-
-     <div class="container">
+     <div class="container" style="padding: 0px">
             {% block content %}
             {% endblock content %}
      </div>
 
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 

@@ -1,2 +1,4 @@
 #忽略 .idea
 ..idea
+.__pycache__
+.db.sqlite3

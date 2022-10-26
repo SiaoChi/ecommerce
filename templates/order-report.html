@@ -1,0 +1,16 @@
+{% extends 'main.html'%}
+{% load static %}
+{% block content %}
+    <br>
+    <div class="box-element">
+    <h4>訂單進度查詢</h4>
+        <br>
+    <form class='form' method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+        <button class='btn btn-success' type='submit' method="POST" >送出</button>
+    </form>
+    </div>
+
+{% endblock %}

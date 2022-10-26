@@ -1,61 +1,128 @@
 {% extends 'main.html' %}
 {% load static %}
 {% block content %}
-    <div class="row">
-		<div class="col-lg-12">
-			<div class="box-element">
-				<a  class="btn btn-outline-dark" href="{% url 'shop' %}">&#x2190; 繼續購物</a>
-				<br>
-				<br>
-				<table class="table">
-					<tr>
-						<th><h6>數量: <strong>{{order.get_cart_items}}</strong></h6></th>
-                        <th><h6>省下:<strong> ${{order.get_save_money}}</strong></h6></th>
-						<th><h6>結帳金額:<strong> ${{order.get_cart_total}}</strong></h6></th>
-						<th>
 
-                            <form class='form' method="POST">
-							{% csrf_token %}
-                                <button style="float:right; margin:5px;" class="delete-cart btn btn-success" type="submit" method ="POST">提交訂單</button>
-						    </form>
-                        </th>
-					</tr>
-				</table>
+    <div class="box-element" style="margin-top: 20px">
+    <a  class="btn btn-outline-dark" href="{% url 'shop' %}">&#x2190; 繼續購物</a>
 
-			</div>
-
-			<br>
-			<div class="box-element">
 				<div class="cart-row">
 					<div style="flex:2"></div>
 					<div style="flex:2"><strong>商品</strong></div>
                     <div style="flex:1"></div>
 					<div style="flex:1"><strong>價格</strong></div>
-                    <div style="flex:1"><strong>團購價</strong></div>
+{#                    <div style="flex:1"><strong>團購價</strong></div>#}
 					<div style="flex:1"><strong>數量</strong></div>
 					<div style="flex:1"><strong>金額</strong></div>
 				</div>
+
 				{% for item in items %}
+
 				<div class="cart-row">
 					<div style="flex:2"><img class="row-image" src="{{item.product.imageURL}}"></div>
-					<div style="flex:2"><p>{{item.product.name}}</p></div>
-                    <span style="flex:1 ; cursor: pointer ; font-size: 4px ;text-align: left ; color: slategray" data-product="{{item.product.id}}" data-action="delete" class="update-cart">刪除</span>
-					<div style="flex:1"><p>${{item.product.price}}</p></div>
+					<div style="flex:2"><p>{{item.product.name}}<br><span style="flex:1 ; cursor: pointer ; font-size: 4px ;text-align: left ; color: slategray" data-product="{{item.product.id}}" data-action="delete" class="update-cart update-page">刪除</span></p>
+                </div>
+{#					<div style="flex:1"><p>${{item.product.price}}</p></div>#}
                     <div style="flex:1"><p>${{item.product.promotion}}</p></div>
-					<div style="flex:1">
-						<p class="quantity">{{item.quantity}}</p>
+					<div style="flex:1" >
+						<p class="quantity item-num" >{{item.quantity}}</p>
 						<div class="quantity">
-							<img data-product="{{item.product.id}}" data-action="add" class="chg-quantity update-cart" src="{% static  'images/up.png' %}">
+							<img data-product="{{item.product.id}}" data-action="add" class="chg-quantity update-cart update-page" src="{% static  'images/up.png' %}">
 
-							<img data-product="{{item.product.id}}" data-action="remove" class="chg-quantity update-cart" src="{% static  'images/down.png' %}">
+							<img data-product="{{item.product.id}}" data-action="remove" class="chg-quantity update-cart update-page" src="{% static  'images/down.png' %}">
 						</div>
 					</div>
-					<div style="flex:1"><p>${{item.get_total}}</p></div>
+					<div  id="item-total" style="flex:1" id="update-total"><p>${{item.get_total}}</p></div>
 				</div>
 				{% endfor %}
-			</div>
-		</div>
-	</div>
+
+    <br>
+    <div class="cart-row">
+                <div id='order-num' style="flex:1"><h6>數量: <strong>{{order.get_cart_items}}</strong></h6></div>
+{#                        <th><h6>省下:<strong> ${{order.get_save_money}}</strong></h6></th>#}
+                <div id='order-total' style="flex:1"><h6>小計:<strong> ${{order.get_cart_total}}</strong></h6></div>
+                       </div>
+
+     <div class="cart-row">
+         {% if order_total < 1000 %}
+              <div style='flex:1;font-weight:bold;color:hotpink'>提醒您，消費滿1000元，可享免運資格 </div>
+            <div style="flex:1" id="show-deliver"><h6>運送:{{ selected_deliver | default:"請選擇" }} </h6></div>
+{#             {% if order_total < 1000 %}#}
+{#            <div style="flex:1"><h6 id="delivery_fee">運費: ${{shipping_fee}}</h6></div>#}
+{#            <div style="flex:1"><h6>總金額:<span style="color:hotpink"> ${{shipping_total}}</span></h6></div>#}
+{##}
+         {% elif order_total >= 1000  %}
+              <div style='flex:1;color:hotpink; font-weight: bold'>＊消費滿1000元，符合免運費資格</div>
+              <div style="flex:1" id="show-deliver"><h6>運送:{{ selected_deliver | default:"請選擇" }} </h6></div>
+
+         {% else %}
+             <div style='flex:1;color:hotpink'>請選擇下方寄送方式</div>
+             <div style="flex:1" id="show-deliver"><h6>運送:{{ selected_deliver | default:"請選擇"}} </h6></div>
+
+    {% endif %}
+    </div>
+    <div>
+        <form>
+            {% csrf_token %}
+            {{ delivery_f.as_p }}
+        </form>
+    </div>
+
+
+
+        {% if after_discount_total %}
+        <div class="cart-row">
+                    <div style="flex:1"><h6>優惠碼折扣:<span style="color:hotpink"> ${{coupon.discount}}</span></h6></div>
+                    <div style="flex:1"><h6>折扣後金額:<span style="color:hotpink"> ${{after_discount_total}}</span></h6></div>
+        </div>
+        {% endif %}
+
+{#         <div clas="cart-row">#}
+{#            {% if selected_deliver %}<div style="flex:1"><h6>運送:{{ selected_deliver }} </h6></div>{% else %}<h6 style="color: hotpink">請選擇運送方式</h6>{% endif %}#}
+{#         </div>#}
+
+        <div clas="cart-row">
+             <form class='form' method="POST">
+                 {% csrf_token %}
+                 <button style="float: right" class="delete-cart btn btn-success" type="submit" method ="POST" name="checkout">提交訂單</button>
+             </form>
+        </div>
+            <br>
+
+
+    </div>
+
+
+    <br>
+
+    <div class="box-element">
+        <h5>付款方式</h5>
+        <br>
+        <p>付款方式 : ATM轉帳</p>
+{#        <form>#}
+{#            {{ selected_deliver }}#}
+{#            {% csrf_token %}#}
+{#            {{ delivery_f.as_p }}#}
+{#        </form>#}
+
+{#        <input id='printt' onchange="test()">#}
+
+
+    </div>
+    <br>
+
+    <div class="box-element">
+        <h5>輸入您的優惠碼</h5>
+        <br>
+                 <form class="form select" method = 'POST'>
+                   {% csrf_token %}
+                   {{ coupon_form.as_p }}
+                     <button style="float: right" class=" btn btn-success" type ='submit' name="coupon">送出優惠碼</button>
+                     <br>
+                 </form>
+    </div>
+
+    <br>
+    <br>
 
 
 

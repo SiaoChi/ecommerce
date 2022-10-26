@@ -1,4 +1,7 @@
 from django.db import models
+import uuid
+import django.utils.timezone as timezone
+from django.utils.translation import gettext_lazy as _
 
 
 # Create your models here.
@@ -36,15 +39,35 @@ class ProductImage(models.Model):
             url = ''
         return url
 
+CHOICES_BOOLEANO_YESNO = (
+    (True, _('是')),
+    (False, _('否'))
+)
+
+CHOICES_FOR_ORDER = {
+    ('是','是'),
+    ('否','否'),
+}
+
 class Order(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False, verbose_name='訂單編號')
     name = models.CharField(max_length=10,verbose_name='收件人', null=False)
     phone = models.CharField(max_length=12,verbose_name='手機號碼', null=False)
     mail = models.EmailField(null= True, verbose_name='電子信箱')
-    zipcode = models.CharField(max_length=6, null=False,verbose_name='郵遞區號')
-    address = models.CharField(max_length=200, null=False,verbose_name='地址')
-    complete = models.BooleanField(default=False)
+    zipcode = models.CharField(max_length=6, null=True, blank= True,verbose_name='郵遞區號')
+    address = models.CharField(max_length=200, null=True, blank= True,verbose_name='地址')
+    delivery_company = models.CharField(max_length=20, null=True,blank= True,verbose_name='運送超市')
+    delivery_store = models.CharField(max_length=20, null=True,blank= True,verbose_name='店到店門市' )
     message = models.TextField(max_length=500,null=True, blank= True ,verbose_name='備註欄')
     datetime = models.DateTimeField(auto_now_add=True)
+    delivery_price = models.IntegerField(verbose_name='運費',default=0, null=True,blank=True)
+    coupon_price = models.IntegerField(verbose_name='優惠卷折扣',default=0, null=True,blank=True)
+    total_price = models.IntegerField(verbose_name='結帳金額',default=0, null=True,blank=True)
+    transfer = models.CharField(max_length=20, default='否', verbose_name='收到款項', choices =CHOICES_FOR_ORDER)
+    complete = models.CharField(max_length=20, default='否',verbose_name='已寄出訂單', choices =CHOICES_FOR_ORDER)
+
+
+    # help_text = "請輸入有效的電子信箱"
 
     def __str__(self):
         return self.name
@@ -111,7 +134,7 @@ class Carousel(models.Model):
 class Coupon(models.Model):
     name = models.CharField(max_length=20, verbose_name='優惠券名稱')
     code = models.CharField(max_length=10, verbose_name='優惠碼')
-    discount = models.IntegerField(max_length=5, verbose_name='折扣費用')
+    discount = models.IntegerField(verbose_name='折扣費用')
     valid_from = models.DateTimeField( verbose_name='開始日期')
     valid_to = models.DateTimeField( verbose_name='結束日期')
     active = models.BooleanField (verbose_name ='啟用')
@@ -119,3 +142,26 @@ class Coupon(models.Model):
     def __str__(self):
         return self.name
 
+
+class Delivery(models.Model):
+    delivery = models.ManyToManyField('DeliverCompany', verbose_name ='選擇送貨方式')
+
+    def __str__(self):
+        return self.delivery
+
+class DeliverCompany(models.Model):
+    company = models.CharField(max_length=10, verbose_name= '運送方式')
+    fee = models.IntegerField(verbose_name ='運費')
+
+    def __str__(self):
+        return self.company
+
+class PaymentReport(models.Model):
+    transfername = models.CharField(max_length=10,verbose_name= '匯款人姓名',null=False, blank=False)
+    transferNums = models.CharField(max_length=15 ,verbose_name ="帳號後五碼",null=False, blank=False)
+    transferPrice = models.CharField(max_length=15 ,verbose_name ="匯款金額",null=False, blank=False)
+    transferdate = models.CharField(max_length=15 ,verbose_name ="匯款日期",null=False, blank=False)
+    sendingdate = models.DateTimeField(default = timezone.now, verbose_name ="填表單日期")
+
+    def __str__(self):
+        return self.transfername

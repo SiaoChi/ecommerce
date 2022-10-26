@@ -2,7 +2,6 @@
 {% load static %}
 {% block content %}
 
-
 <div id="carouselExampleIndicators" class="carousel slide " data-ride="carousel">
     <ol class="carousel-indicators">
         {% for obj in carousel %}
@@ -39,17 +38,17 @@
     </div>
 </div>
 
-
+    <br>
 
 
     {% for b in board %}
-    <div class="box-element">
+    <div class="box-element" >
         <h2>購物公布欄</h2>
         <p>{{b.home_board | safe}}</p>
     </div>
     {% endfor %}
     <br>
-    <br>
+
 {% for product in products %}
     <div class="col-lg-12">
         <img class="thumbnail" src="{{ product.imageURL }}">
@@ -58,22 +57,31 @@
             <p>{{ product.detail | safe }}</p>
             <p style="text-decoration: line-through">原價：NT{{ product.price }}</p>
             <p>團購價：NT{{ product.promotion }}</p>
-            <button class="btn btn-outline-secondary add-btn update-cart" data-product="{{ product.id }}" data-action="add">加入購物車</button></div>
+            <button class="btn btn-outline-secondary add-btn update-cart update-shop"   data-product="{{ product.id }}" data-action="add">加入購物車</button></div>
     </div>
     <br>
     <br>
-        <div class = 'fixed-cart'>
-        <a href="{% url 'cart' %}">
-	    		<img  id="cart-icon" src="{% static 'images/cart.png' %}">
-	    	</a>
-	    	<p id="fix-cart-total">{{ cartItems }}</p>
-        </div>
+{#        <div class = 'fixed-cart'>#}
+{#        <a href="{% url 'cart' %}">#}
+{#	    		<img  id="cart-icon" src="{% static 'images/cart.png' %}">#}
+{#	    	</a>#}
+{#	    	<p id="fix-cart-total">{{ cartItems }}</p>#}
+{#        </div>#}
 {#    切記子model的名稱必須是小寫+ _set#}
 {#    {% for i in  product.productimage_set.all  %}#}
 {#        <img class = 'thumbnail' src="{{ i.image.url }}">#}
 {#    {% endfor %}#}
 
 {% endfor %}
+
+
+
+    <div class="shop-footer">
+        <div  style="flex: none; font-weight: bolder">小計：＄{{ order_total }}</div>
+        <div  style="margin-left: 30px;width: 140px"><a href="{% url 'cart' %}" class="btn btn-info" >購物車<span  id="update-shop">({{ cartItems }})</span></a></div>
+    </div>
+
+
 
 {% endblock %}
 

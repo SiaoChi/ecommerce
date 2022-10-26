@@ -14,7 +14,7 @@ p{
 }
 
 .box-element{
-	box-shadow:hsl(0, 0%, 70%) 0 0 10px;
+	box-shadow:hsl(0, 0%, 60%) 0 0 10px;
 	background-color: #fff;
 	border-radius: 3px;
 	padding:30px;
@@ -26,6 +26,25 @@ p{
 
 }
 
+/*.thumbnail{*/
+/*	width: 70%;*/
+/*	display: block;*/
+/*	margin: 0px auto;*/
+/*	max-width: 700px;*/
+/*	min-width: 350px;*/
+
+/*	-webkit-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);*/
+/*    -moz-box-shadow: -1px -3px 3px -2px rgba(214,214,214,1);*/
+/*    box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);*/
+/*}*/
+
+@media (max-width: 450px) {
+	.thumbnail{
+		width: 75%;
+		max-width: 450px;
+		min-width: 320px;
+	}
+}
 .thumbnail{
 	width: 70%;
 	display: block;
@@ -90,7 +109,7 @@ p{
 }
 
 .row-image{
-	width: 100px;
+	width: 70px;
 }
 
 .form-field{
@@ -175,14 +194,30 @@ p{
 }
 
 .container{
-    padding-right: 15px;
-    padding-left: 15px;
+    /*padding-right: 15px;*/
+    /*padding-left: 15px;*/
     margin-right: auto;
     margin-left: auto;
-	max-width: 1200px;
+	max-width: 100%;
 }
 
 .c-size{
 	width: 40%;
+
+}
+
+.shop-footer {
+	height: 50px;
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: #b0e2e8;
+	color: darkslategrey;
+	text-align: center;
+
+	display: flex;
+	align-items:center;
+	justify-content: center;
 
 }
