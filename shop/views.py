@@ -27,7 +27,7 @@ def shop(request):
     products = Product.objects.all()
     board = Board.objects.all()
     print(request.session.items())
-    return render(request,'shop.html',locals())
+    return render(request, 'index.html', locals())
 
 def cart(request):
     # request.session.flush()

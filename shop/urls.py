@@ -7,7 +7,7 @@ from django.urls import include
 
 urlpatterns = [
     #網頁path
-    path('', views.shop , name = 'shop'),
+    path('', views.shop, name ='index'),
     path('cart/',views.cart, name = 'cart'),
     path('checkout/', views.checkout , name ='checkout'),
     path('summernote/', include('django_summernote.urls')),
