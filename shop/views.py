@@ -254,7 +254,7 @@ def updateDeliver(request):
 
 def update_order(request):
     request.session.flush()
-    return redirect('/cart')
+    return redirect('/cart/')
 
 def payment_report(request):
     form = PaymentReportForm()
