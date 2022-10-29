@@ -119,7 +119,7 @@ def cart(request):
 def checkout(request):
     # 畫面資訊
     try:
-        check_board = Board.objects.all()
+        checkout_board = Board.objects.get(id=1).checkout_board
         cartdata = cookieCart(request)
         form = OrderForm()
         cartItems = cartdata['cartItems']
@@ -127,7 +127,7 @@ def checkout(request):
         shipping_fee = request.session['shipping_fee']
         order_total = order['get_cart_total']
         items = cartdata['items']
-        checkout_board = Board.objects.get(id = 1).checkout_board
+
 
         shipping_total = request.session['shipping_total']
         selected_deliver = request.session.get('delivery')
@@ -143,17 +143,21 @@ def checkout(request):
         #訂購資訊表單送出
         if request.method == "POST" and 'order' in request.POST:
             form = OrderForm(request.POST)
+            print('1')
             if form.is_valid():
                 form = form.save(commit = False)
                 form.delivery_price = shipping_fee
                 form.coupon_price = coupon_discount
                 form.total_price = shipping_total
+                print('2')
                 form.delivery_company = str(request.session['delivery'])
-                # print('儲存form')
-                # print(form.delivery_price,form.coupon_price,form.total_price,form.delivery_company)
-                form.save()
+                print('3')
+                print(form.id)
                 # print(form.instance.id)
                 shop_items = ''
+                print('4')
+                form.save()
+                print('5')
                 #以下把cookCart中的訂購的item拆解成訂單可以存檔案資料
                 for item in items:
                     productId = item['id']
@@ -223,7 +227,7 @@ def checkout(request):
         return render(request,'checkout.html',locals())
 
     except:
-        # pass
+        print('checkout頁面顯示有問題')
         return render(request, 'checkout.html')
 
 

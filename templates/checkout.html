@@ -64,12 +64,11 @@
             <div class="box-element">
                     <h4>填寫訂購資訊</h4>
                 <br>
-                    <form class="form" method = 'POST' >
+                    <form class="form" method = 'POST'  >
                         {% csrf_token %}
                         {{ form.as_p}}
-{#                        <button class=" btn btn-success " type ='submit' name="order">送出結帳</button>#}
-                        <button class=" btn btn-success g-recaptcha" data-sitekey="6Les9aQiAAAAAKRZhn9gqL3OCtElF9PwIBoYmbiT" data-callback='onSubmit' data-action='submit' type ='submit' name="order">送出結帳</button>
-
+                        <button class=" btn btn-success " type ='submit' name="order">送出結帳</button>
+{#                        <button class=" btn btn-success g-recaptcha" data-sitekey="6Les9aQiAAAAAKRZhn9gqL3OCtElF9PwIBoYmbiT" data-callback='onSubmit' data-action='submit' name="order">送出結帳</button>#}
                     </form>
 			</div>
 
