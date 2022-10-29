@@ -149,15 +149,10 @@ def checkout(request):
                 form.delivery_price = shipping_fee
                 form.coupon_price = coupon_discount
                 form.total_price = shipping_total
-                print('2')
                 form.delivery_company = str(request.session['delivery'])
-                print('3')
-                print(form.id)
                 # print(form.instance.id)
-                shop_items = ''
-                print('4')
                 form.save()
-                print('5')
+                shop_items = ''
                 #以下把cookCart中的訂購的item拆解成訂單可以存檔案資料
                 for item in items:
                     productId = item['id']
