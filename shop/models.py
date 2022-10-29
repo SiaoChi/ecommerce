@@ -3,8 +3,19 @@ import uuid
 import django.utils.timezone as timezone
 from django.utils.translation import gettext_lazy as _
 
+#壓縮圖檔module
+from io import BytesIO
+from PIL import Image
+from django.core.files import File
 
 # Create your models here.
+
+def compress(image):
+    im = Image.open(image)
+    im_io = BytesIO()
+    im.save(im_io, 'WebP', quality=80, optimize =True)
+    new_image = File(im_io, name=image.name)
+    return new_image
 
 class Product(models.Model):
     name = models.CharField(max_length=40, verbose_name='產品名')
@@ -12,6 +23,13 @@ class Product(models.Model):
     promotion = models.IntegerField(verbose_name ='特價')
     detail = models.TextField(max_length= 700 , verbose_name= '商品說明')
     image = models.ImageField(null=True, blank=True , verbose_name= '圖片',upload_to="product")
+
+    def save(self, *args, **kwargs):
+        new_image = compress(self.image)
+        self.image = new_image
+        super().save(*args, **kwargs)
+        print('compressed!')
+
 
     def __str__(self):
         return self.name
