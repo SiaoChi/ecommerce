@@ -1,0 +1,16 @@
+# flyctl launch added from .gitignore
+#忽略 .idea
+**/..idea
+**/.__pycache__
+**/.db.sqlite3
+**/api
+
+# flyctl launch added from .idea/.gitignore
+# Default ignored files
+.idea/shelf
+.idea/workspace.xml
+# Editor-based HTTP Client requests
+.idea/httpRequests
+# Datasource local storage ignored files
+.idea/dataSources
+.idea/dataSources.local.xml
