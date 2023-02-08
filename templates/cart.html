@@ -61,9 +61,10 @@
     {% endif %}
     </div>
     <div>
-        <form>
+        <form method ="POST">
             {% csrf_token %}
             {{ delivery_f.as_p }}
+            <button style="float: right" class="delete-cart btn btn-success" type="submit"  name="checkout">提交訂單</button>
         </form>
     </div>
 
@@ -80,12 +81,12 @@
 {#            {% if selected_deliver %}<div style="flex:1"><h6>運送:{{ selected_deliver }} </h6></div>{% else %}<h6 style="color: hotpink">請選擇運送方式</h6>{% endif %}#}
 {#         </div>#}
 
-        <div clas="cart-row">
-             <form class='form' method="POST">
-                 {% csrf_token %}
-                 <button style="float: right" class="delete-cart btn btn-success" type="submit" method ="POST" name="checkout">提交訂單</button>
-             </form>
-        </div>
+{#        <div clas="cart-row">#}
+{#             <form class='form' method="POST">#}
+{#                 {% csrf_token %}#}
+{#                 <button style="float: right" class="delete-cart btn btn-success" type="submit" method ="POST" name="checkout">提交訂單</button>#}
+{#             </form>#}
+{#        </div>#}
             <br>
 
 

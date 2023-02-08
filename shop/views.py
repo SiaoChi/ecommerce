@@ -38,7 +38,7 @@ def cart(request):
     order_total = order['get_cart_total']
     coupon_form = CouponForm()
     delivery_f = DeliverForm()
-
+    # print(delivery_f)
     # 運費
     if order_total >= 1000:
         shipping_fee = 0
@@ -56,8 +56,10 @@ def cart(request):
         shipping_total = order_total
         print('3 費用小於一千運費')
 
+    print('儲存session')
     request.session['shipping_total']= shipping_total
     request.session['shipping_fee'] = shipping_fee
+    print('儲存session成功')
 
     # 優惠碼送出
     if request.method == "POST" and 'coupon' in request.POST:
@@ -86,6 +88,7 @@ def cart(request):
                 request.session['coupon_used'] = True
                 request.session['after_discount_total'] = after_discount_total
                 request.session['coupon.discount'] = coupon.discount
+                print('測試')
 
             # print except的問題
             except Exception as e:
@@ -98,6 +101,7 @@ def cart(request):
 
     # 結帳按鈕
     if request.method == 'POST' and 'checkout' in request.POST:
+        print('按下checkout btn')
         if request.session.get('delivery') and cartItems > 0:
             return redirect('checkout')
 
@@ -110,14 +114,20 @@ def cart(request):
             messages.success(request, '請選擇運送方式')
             print(request.session.items())
             pass
+    else:
+        print('結帳送出功能壞了')
+        print(request.session.items())
 
-    request.session.get_expire_at_browser_close()
+
+    # request.session.get_expire_at_browser_close()
     return render(request,'cart.html',locals())
 
 
 
 def checkout(request):
     # 畫面資訊
+    print('checkout page')
+
     try:
         checkout_board = Board.objects.get(id=1).checkout_board
         cartdata = cookieCart(request)
@@ -127,6 +137,8 @@ def checkout(request):
         shipping_fee = request.session['shipping_fee']
         order_total = order['get_cart_total']
         items = cartdata['items']
+
+        context = {'checkout_board': checkout_board, 'cartdata': cartdata,'items':items,'shipping_fee':shipping_fee}
 
 
         shipping_total = request.session['shipping_total']
@@ -140,10 +152,12 @@ def checkout(request):
         else:
             coupon_discount = 0
 
+        print('功能有跑到這裡1')
+
         #訂購資訊表單送出
         if request.method == "POST" and 'order' in request.POST:
             form = OrderForm(request.POST)
-            print('1')
+            print('訂購資訊表單送出')
             if form.is_valid():
                 form = form.save(commit = False)
                 form.delivery_price = shipping_fee
@@ -210,6 +224,7 @@ def checkout(request):
             cartItems = 0
 
             print(request.session.items())
+            print('功能有跑到這裡2')
 
             #刪除session的資料，避免重複購買資料有誤
             # for key in list(request.session.keys()):
@@ -219,6 +234,8 @@ def checkout(request):
             # return render(request,'checkout.html',locals())
 
 
+
+
         return render(request,'checkout.html',locals())
 
     except:
@@ -226,6 +243,7 @@ def checkout(request):
         return render(request, 'checkout.html')
 
 
+#前端js觸發下拉選單拿到「取貨方式」
 def updateDeliver(request):
     if request.method == 'POST':
         try:
@@ -245,8 +263,9 @@ def updateDeliver(request):
             messages.warning(request,'未知錯誤')
 
     context = {'shipping_fee': shipping_fee, 'data':data }
-    # print(data_json)
-    # print(type(data_json))
+    print(data_json)
+    print(type(data_json))
+    print(context['shipping_fee'])
 
     return JsonResponse(data_json, safe=False)
     # return cart(request)
