@@ -115,7 +115,7 @@ def cart(request):
             print(request.session.items())
             pass
     else:
-        print('結帳送出功能壞了')
+        print('結帳送出功能尚未運作，可能是還沒有啟動按鈕')
         print(request.session.items())
 
 
