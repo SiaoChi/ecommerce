@@ -30,7 +30,7 @@ python manage.py collectstatic --noinput
 ```
 7. run server<br>
 ```
-python manage.py
+python manage.py runserver
 ```
 
 <h2>Functions</h2>
