@@ -1,6 +1,6 @@
 # small ecommerce without shop-module (Django/Python)
 
-<h2>Introduction</h2>
+<h2>Instruction</h2>
 A small shopping website using Python/Django with bootstrap for a friend who was organizing a group purchase. <br></br>
 The website includes features such as creating product descriptions, calculating costs, creating and validating discount coupons, setting up free shipping, implementing automatic Gmail sending, and providing progress reports on account payments.
 <br></br>
